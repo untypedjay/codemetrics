@@ -1,6 +1,6 @@
 package main;
 
-public class Main {
+public class CLI {
 
     public static void main(String[] args) {
 	// write your code here
