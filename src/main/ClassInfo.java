@@ -1,48 +1,92 @@
 package main;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
 public class ClassInfo {
+    private Class<?> classObject;
     private String className = null;
-    private int publicMethodsNr = 0;
-    private int privateMethodsNr = 0;
-    private int protectedMethodsNr = 0;
-    private int packageMethodsNr = 0;
-    private int interfacesNr = 0;
-    private int inheritanceDepth = 1;
-    private int totalParameters = 0;
+    private Method[] methods;
+    private Class<?>[] interfaces;
+
+    private Class<?>[] parameterTypes;
 
     public ClassInfo(Class<?> inputClass) {
+        this.classObject = inputClass;
         this.className = inputClass.getName();
+        this.methods = inputClass.getDeclaredMethods();
+        this.interfaces = inputClass.getInterfaces();
     }
 
-    public String getClassName() {
-        return className;
+    public int getNumberOfMethods() {
+        return methods.length;
     }
 
-    public int getPublicMethodsNr() {
-        return publicMethodsNr;
+    public int getNumberOfPublicMethods() {
+        int count = 0;
+        for (int i = 0; i < getNumberOfMethods(); ++i) {
+            if (Modifier.isPublic(methods[i].getModifiers())) {
+                ++count;
+            }
+        }
+        return count;
     }
 
-    public int getPrivateMethodsNr() {
-        return privateMethodsNr;
+    public int getNumberOfPackageMethods() {
+        int count = 0;
+        for (int i = 0; i < getNumberOfMethods(); ++i) {
+            if (!Modifier.isPublic(methods[i].getModifiers()) &&
+                    !Modifier.isProtected(methods[i].getModifiers()) &&
+                    !Modifier.isPrivate(methods[i].getModifiers())) {
+                ++count;
+            }
+        }
+        return count;
     }
 
-    public int getProtectedMethodsNr() {
-        return protectedMethodsNr;
+    public int getNumberOfProtectedMethods() {
+        int count = 0;
+        for (int i = 0; i < getNumberOfMethods(); ++i) {
+            if (Modifier.isProtected(methods[i].getModifiers())) {
+                ++count;
+            }
+        }
+        return count;
     }
 
-    public int getPackageMethodsNr() {
-        return packageMethodsNr;
+    public int getNumberOfPrivateMethods() {
+        int count = 0;
+        for (int i = 0; i < getNumberOfMethods(); ++i) {
+            if (Modifier.isPrivate(methods[i].getModifiers())) {
+                ++count;
+            }
+        }
+        return count;
     }
 
-    public int getInterfacesNr() {
-        return interfacesNr;
+    public int getNumberOfImplementedInterfaces() {
+        return interfaces.length;
     }
 
-    public int getInheritanceDepth() {
-        return inheritanceDepth;
+    public int getDepthOfClassHierarchy() {
+        int depth = 0;
+        Class<?> tempClass = classObject.getSuperclass();
+        while (tempClass != null) {
+            tempClass = tempClass.getSuperclass();
+            ++depth;
+        }
+        return depth;
     }
 
-    public double averageParametersPerMethod() {
-        return totalParameters / (publicMethodsNr + privateMethodsNr + protectedMethodsNr + packageMethodsNr);
+    public int getNumberOfParameters() {
+        int count = 0;
+        for (Method m : methods) {
+            count += m.getParameterTypes().length;
+        }
+        return count;
+    }
+
+    public double getAverageNumberOfParameters() {
+        return (double)getNumberOfParameters() / getNumberOfMethods();
     }
 }
