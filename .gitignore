@@ -1,2 +1,5 @@
 *.iml
 *.idea
+JarTests
+.DS_Store
+out

@@ -2,6 +2,7 @@ package test;
 
 import main.ClassInfo;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -11,11 +12,6 @@ import static org.junit.Assert.*;
 
 public class TestCodemetrics {
     private Class reflectClass = ClassInfo.class;
-    @Test
-    public void testGetClassName() {
-        ClassInfo info1 = new ClassInfo("testclass");
-        assertEquals(info1.getClassName(), "testclass");
-    }
 
     @Test
     public void testReflectClass() {
