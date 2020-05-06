@@ -1,4 +1,4 @@
-package main;
+package main.types;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -9,13 +9,15 @@ public class ClassInfo {
     private Method[] methods;
     private Class<?>[] interfaces;
 
-    private Class<?>[] parameterTypes;
-
     public ClassInfo(Class<?> inputClass) {
         this.classObject = inputClass;
         this.className = inputClass.getName();
         this.methods = inputClass.getDeclaredMethods();
         this.interfaces = inputClass.getInterfaces();
+    }
+
+    public String getClassName() {
+        return className;
     }
 
     public int getNumberOfMethods() {

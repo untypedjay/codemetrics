@@ -1,6 +1,6 @@
 package test;
 
-import main.ClassInfo;
+import main.types.ClassInfo;
 import org.junit.Test;
 
 import java.util.AbstractCollection;
@@ -10,6 +10,18 @@ import java.util.Stack;
 import static org.junit.Assert.assertEquals;
 
 public class TestClassInfo {
+    @Test
+    public void testGetClassNameThrowable() {
+        ClassInfo ci = new ClassInfo(Throwable.class);
+        assertEquals("java.lang.Throwable", ci.getClassName());
+    }
+
+    @Test
+    public void testGetClassNameStack() {
+        ClassInfo ci = new ClassInfo(Stack.class);
+        assertEquals("java.util.Stack", ci.getClassName());
+    }
+
     @Test
     public void testGetNumberOfMethodsThrowable() {
         ClassInfo ci = new ClassInfo(Throwable.class);

@@ -1,10 +1,13 @@
 package main;
 
+import main.types.ClassInfo;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -16,16 +19,19 @@ public class CLI {
         final String dir = "file://" + System.getProperty("user.dir") + "/";
         Vector<String> classNames = new Vector<String>();
         URL[] jarUrls = new URL[args.length];
-            for (int i = 0; i < args.length; ++i) {
-                try {
-                    jarUrls[i] = new URL(dir + args[i]);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                classNames.addAll(getClassNamesFromJar(jarUrls[i]));
+        for (int i = 0; i < args.length; ++i) {
+            try {
+                jarUrls[i] = new URL(dir + args[i]);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
             }
-            printVector(classNames);
-            getClassArray(jarUrls, classNames);
+            classNames.addAll(getClassNamesFromJar(jarUrls[i]));
+        }
+        printVector(classNames);
+        TreeMap<String, ClassInfo> classCollection = getReflectionClassCollection(getClassArray(jarUrls, classNames));
+
+
+        Printer.printClassMetrics(Metrics.getClassMetrics("logic.model.Spielfeld", classCollection));
     }
 
     private static Vector getClassNamesFromJar(URL jarUrl) {
@@ -65,5 +71,15 @@ public class CLI {
         for (String entry : v) {
             System.out.println(entry);
         }
+    }
+
+    public static TreeMap<String, ClassInfo> getReflectionClassCollection(Vector<Class<?>> classArray) {
+        TreeMap<String, ClassInfo> collection = new TreeMap<String, ClassInfo>();
+        ClassInfo current;
+        for (Class<?> c : classArray) {
+            current = new ClassInfo(c);
+            collection.put(current.getClassName(), current);
+        }
+        return collection;
     }
 }

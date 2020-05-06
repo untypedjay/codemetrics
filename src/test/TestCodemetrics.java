@@ -1,8 +1,6 @@
 package test;
 
-import main.ClassInfo;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
+import main.types.ClassInfo;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -16,7 +14,7 @@ public class TestCodemetrics {
     @Test
     public void testReflectClass() {
         String className = reflectClass.getName();
-        assertEquals(className, "main.ClassInfo");
+        assertEquals(className, "main.types.ClassInfo");
     }
 
     @Test
