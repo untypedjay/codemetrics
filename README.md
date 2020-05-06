@@ -33,3 +33,5 @@ JarTests/spring/spring-web-5.2.5.RELEASE.jar
 JarTests/spring/spring-webflux-5.2.5.RELEASE.jar
 JarTests/spring/spring-webmvc-5.2.5.RELEASE.jar
 JarTests/spring/spring-websocket-5.2.5.RELEASE.jar
+
+JarTests/bermuda/bermudagame.jar

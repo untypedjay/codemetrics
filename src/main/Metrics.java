@@ -1,5 +1,6 @@
 package main;
 
+import jdk.nashorn.api.tree.Tree;
 import main.types.ClassInfo;
 import main.types.MetricsType;
 import main.types.PackageMetricsType;
@@ -55,7 +56,7 @@ public class Metrics {
                                               (int)findAvg(interfaces), (int)findAvg(inheritanceDepth),
                                               findAvg(averageParam)));
         packageMetrics.setNrOfClasses(packageContainer.size());
-        packageMetrics.setNrOfSubpackages(getSubpackages(packageContainer));
+        packageMetrics.setNrOfSubpackages(getSubpackagesNumber(getSubpackages(packageContainer)));
         return packageMetrics;
     }
 
@@ -63,7 +64,7 @@ public class Metrics {
         return packageName;
     }
 
-    private static double findMax(TreeSet<Double> values) {
+    public static double findMax(TreeSet<Double> values) {
         double max = 0;
         for (double d : values) {
             if (d > max) max = d;
@@ -71,7 +72,7 @@ public class Metrics {
         return max;
     }
 
-    private static double findMin(TreeSet<Double> values) {
+    public static double findMin(TreeSet<Double> values) {
         double min = Double.POSITIVE_INFINITY;
         for (double d : values) {
             if (d < min) min = d;
@@ -79,7 +80,7 @@ public class Metrics {
         return min;
     }
 
-    private static double findAvg(TreeSet<Double> values) {
+    public static double findAvg(TreeSet<Double> values) {
         double accumulator = 0;
         for (double d : values) {
             accumulator += d;
@@ -87,18 +88,22 @@ public class Metrics {
         return accumulator / values.size();
     }
 
-    private static int getSubpackages(TreeMap<String, ClassInfo> cont) {
+    public static TreeSet<String> getSubpackages(TreeMap<String, ClassInfo> cont) {
         TreeSet<String> subpackages = new TreeSet<String>();
         for (Map.Entry<String, ClassInfo> elem : cont.entrySet()) {
             int count = (int)elem.getValue().getClassName().chars().filter(num -> num == '.').count();
             String substring = elem.getValue().getClassName();
             for (int i = 0; i < count; ++i) {
-                if (subpackages.contains(substring.substring(i, elem.getValue().getClassName().indexOf('.')))) {
+                if (subpackages.contains(substring.substring(0, elem.getValue().getClassName().indexOf('.')))) {
                     subpackages.add(elem.getValue().getClassName());
                     substring = elem.getValue().getClassName().substring(elem.getValue().getClassName().indexOf('.') + 1);
                 }
             }
         }
+        return subpackages;
+    }
+
+    public static int getSubpackagesNumber(TreeSet<String> subpackages) {
         return subpackages.size();
     }
 }

@@ -1,17 +1,25 @@
 package main;
 
 import main.types.MetricsType;
+import main.types.PackageMetricsType;
 
 public class Printer {
-    public static void printClassMetrics(MetricsType metrics) {
-        System.out.println("-----------------");
-        System.out.println("Number of public methods: " + metrics.getNrOfPublicMethods());
-        System.out.println("Number of package methods: " + metrics.getNrOfPackageMethods());
-        System.out.println("Number of protected methods: " + metrics.getNrOfProtectedMethods());
-        System.out.println("Number of private methods: " + metrics.getNrOfPrivateMethods());
-        System.out.println("Number of implemented interfaces: " + metrics.getNrOfImplementedInterfaces());
-        System.out.println("Depth of inheritance: " + metrics.getDepthOfInheritance());
-        System.out.println("Average parameters per method: " + metrics.getAverageNrOfParameters());
-        System.out.println("-----------------");
+    public static void printClassMetrics(MetricsType metrics, String className) {
+        System.out.println(className + "(public methods: " + metrics.getNrOfPublicMethods() +
+                ", package methods: " + metrics.getNrOfPackageMethods() +
+                ", protected methods: " + metrics.getNrOfProtectedMethods() +
+                ", private methods: " + metrics.getNrOfPrivateMethods() +
+                ", implemented interfaces: " + metrics.getNrOfImplementedInterfaces() +
+                ", class depth: " + metrics.getDepthOfInheritance() +
+                ", average parameters: " + metrics.getAverageNrOfParameters() + ")");
+    }
+
+    public static void printPackageMetrics(PackageMetricsType metrics, String packageName) {
+        System.out.println("--------------------" + packageName + "--------------------");
+        System.out.println("min(" + metrics.getMin() + ")");
+        System.out.println("max(" + metrics.getMax() + ")");
+        System.out.println("avg(" + metrics.getAvg() + ")");
+        System.out.println("Number of Classes: " + metrics.getNrOfClasses());
+        System.out.println("Number of Subpackages: " + metrics.getNrOfSubpackages());
     }
 }

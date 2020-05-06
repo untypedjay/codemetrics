@@ -27,14 +27,22 @@ public class CLI {
             }
             classNames.addAll(getClassNamesFromJar(jarUrls[i]));
         }
-        printVector(classNames);
         TreeMap<String, ClassInfo> classCollection = getReflectionClassCollection(getClassArray(jarUrls, classNames));
 
+        for (String name : classNames) {
+            try {
+                Printer.printClassMetrics(Metrics.getClassMetrics(name, classCollection) , name);
+            } catch (Throwable e) {
+                // ignore empty values
+            }
+        }
 
-        Printer.printClassMetrics(Metrics.getClassMetrics("logic.model.Spielfeld", classCollection));
+        for (String name : Metrics.getSubpackages(classCollection)) {
+                Printer.printPackageMetrics(Metrics.getPackageMetrics(name, classCollection) , name);
+        }
     }
 
-    private static Vector getClassNamesFromJar(URL jarUrl) {
+    public static Vector<String> getClassNamesFromJar(URL jarUrl) {
         Vector<String> classNames = new Vector<String>();
         try {
             JarFile jf = new JarFile(jarUrl.getPath());
@@ -51,7 +59,7 @@ public class CLI {
         return classNames;
     }
 
-    private static Vector<Class<?>> getClassArray(URL[] jarUrls, Vector<String> classNames) {
+    public static Vector<Class<?>> getClassArray(URL[] jarUrls, Vector<String> classNames) {
         Vector<Class<?>> reflectionClasses = new Vector<Class<?>>();
         URLClassLoader loader = new URLClassLoader(jarUrls);
         int classesLoaded = 0;
@@ -59,7 +67,7 @@ public class CLI {
             try {
                 reflectionClasses.add(loader.loadClass(classNames.get(i)));
                 ++classesLoaded;
-            } catch (Throwable any) {
+            } catch (Throwable e) {
                 // ignore external dependencies
             }
         }
@@ -67,18 +75,16 @@ public class CLI {
         return reflectionClasses;
     }
 
-    private static void printVector(Vector<String> v) {
-        for (String entry : v) {
-            System.out.println(entry);
-        }
-    }
-
-    public static TreeMap<String, ClassInfo> getReflectionClassCollection(Vector<Class<?>> classArray) {
+    public static TreeMap<String, ClassInfo> getReflectionClassCollection(Vector<Class<?>> classVector) {
         TreeMap<String, ClassInfo> collection = new TreeMap<String, ClassInfo>();
         ClassInfo current;
-        for (Class<?> c : classArray) {
-            current = new ClassInfo(c);
-            collection.put(current.getClassName(), current);
+        for (int i = 0; i < classVector.size(); ++i) {
+            try {
+                current = new ClassInfo(classVector.get(i));
+                collection.put(current.getClassName(), current);
+            } catch (Throwable e) {
+                // ignore external dependencies
+            }
         }
         return collection;
     }
