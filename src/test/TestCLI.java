@@ -3,7 +3,6 @@ package test;
 import main.CLI;
 import main.types.ClassInfo;
 import org.junit.Test;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Stack;
@@ -50,7 +49,7 @@ public class TestCLI {
 
     @Test
     public void testGetReflectionClassCollection() {
-        Vector<Class<?>> reflectionClasses = new Vector<Class<?>>();
+        var reflectionClasses = new Vector<Class<?>>();
         reflectionClasses.add(String.class);
         reflectionClasses.add(Stack.class);
         reflectionClasses.add(Object.class);

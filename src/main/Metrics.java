@@ -60,10 +60,6 @@ public class Metrics {
         return packageMetrics;
     }
 
-    public static String getPackageHierarchy(String packageName) {
-        return packageName;
-    }
-
     public static double findMax(TreeSet<Double> values) {
         double max = 0;
         for (double d : values) {
@@ -89,7 +85,7 @@ public class Metrics {
     }
 
     public static TreeSet<String> getSubpackages(TreeMap<String, ClassInfo> cont) {
-        TreeSet<String> subpackages = new TreeSet<String>();
+        var subpackages = new TreeSet<String>();
         for (Map.Entry<String, ClassInfo> elem : cont.entrySet()) {
             int count = (int)elem.getValue().getClassName().chars().filter(num -> num == '.').count();
             String substring = elem.getValue().getClassName();

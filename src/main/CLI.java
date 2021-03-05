@@ -1,7 +1,6 @@
 package main;
 
 import main.types.ClassInfo;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,15 +12,13 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class CLI {
-
-
     public static void main(String[] args) {
-        final String dir = "file://" + System.getProperty("user.dir") + "/";
-        Vector<String> classNames = new Vector<String>();
+        final String DIR = "file://" + System.getProperty("user.dir") + "/";
+        var classNames = new Vector<String>();
         URL[] jarUrls = new URL[args.length];
         for (int i = 0; i < args.length; ++i) {
             try {
-                jarUrls[i] = new URL(dir + args[i]);
+                jarUrls[i] = new URL(DIR + args[i]);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -60,7 +57,7 @@ public class CLI {
     }
 
     public static Vector<Class<?>> getClassArray(URL[] jarUrls, Vector<String> classNames) {
-        Vector<Class<?>> reflectionClasses = new Vector<Class<?>>();
+        var reflectionClasses = new Vector<Class<?>>();
         URLClassLoader loader = new URLClassLoader(jarUrls);
         int classesLoaded = 0;
         for (int i = 0; i < classNames.size(); ++i) {
@@ -76,7 +73,7 @@ public class CLI {
     }
 
     public static TreeMap<String, ClassInfo> getReflectionClassCollection(Vector<Class<?>> classVector) {
-        TreeMap<String, ClassInfo> collection = new TreeMap<String, ClassInfo>();
+        var collection = new TreeMap<String, ClassInfo>();
         ClassInfo current;
         for (int i = 0; i < classVector.size(); ++i) {
             try {
